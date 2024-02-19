@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="./bootstrap.min.css"> 
+      <link rel="stylesheet" href="./style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>ECommerce</title>
+</head>
+<body>
+  <style>
+    #img{
+      width: 100%;
+    }
+  </style>
+    <section>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">ECommerce</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            
+            <div class="menu"><i class="fa-solid fa-bars"></i></div>
+    
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item ">
+                  <a class="nav-link" href="./addproduct.html">Add Products<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./allproduct.html">Products Details</a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">My Cart</a>
+                </li>
+              </ul>
+            
+            </div>
+          </nav>
+    </section>
+    <section>
+      <h1 class="w-50">My Cart</h1>
+      <div id="id"></div>
+  </section>
+
+    <!-- <script>
+        let formdata = JSON.parse(localStorage.getItem('formdata'));
+
+
+        if (formdata) {
+            let productNameContainer = document.getElementById('id');
+
+            productNameContainer.innerHTML = '';
+
+            let validForm = formdata.map(function (data, index) {
+                return `        <div class="container m-auto  border">
+            <div class="row shadow-lg p-3 mb-5 bg-white rounded ">
+
+            <div class="col-lg-6 shadow-lg p-3 mb-5 bg-white rounded">
+                 <img src="${data.imageURL}" alt="" class="img-fluid" id="img">
+            </div>
+            <div class="col-lg-6">
+                <p>product id${index+1}</p>
+                <h4>ProductName:${data.ProductName}</h4>
+                <p>Product Description:${data.productDescription}</p>
+                <p>Total Price :${data.Quantity*data.saleprice}</p>
+            
+            <button class="btn btn-warning mt-3">continue</button>
+</div>
+</div>
+
+</div>`
+            }).join('');
+          
+            productNameContainer.innerHTML = validForm;
+        }
+    </script> -->
+
+
+    <!-- <script>
+      let formdata = JSON.parse(localStorage.getItem('formdata'));
+  
+      if (formdata) {
+          let productNameContainer = document.getElementById('id');
+  
+          productNameContainer.innerHTML = '';
+  
+          let validForm = formdata.map(function (data, index) {
+              let totalPrice = data.Quantity * data.saleprice; // Calculate total price
+              return `        
+                  <div class="container m-auto border">
+                      <div class="row shadow-lg p-3 mb-5 bg-white rounded">
+                          <div class="col-lg-6 shadow-lg p-3 mb-5 bg-white rounded">
+                              <img src="${data.imageURL}" alt="" class="img-fluid" id="img">
+                          </div>
+                          <div class="col-lg-6">
+                              <p>Product id: ${index + 1}</p>
+                              <h4>ProductName: ${data.ProductName}</h4>
+                              <p>Product Description: ${data.productDescription}</p>
+                              <p>Total Price: ${totalPrice}</p>
+                              <button class="btn btn-warning mt-3">continue</button>
+                          </div>
+                      </div>
+                  </div>`;
+          }).join('');
+  
+          productNameContainer.innerHTML = validForm;
+      }
+  </script> -->
+  
+  <script>
+    let formdata = JSON.parse(localStorage.getItem('formdata'));
+    let TotalPrice = localStorage.getItem('TotalPrice');
+    console.log('TotalPrice',TotalPrice);
+
+    if (formdata) {
+        let productNameContainer = document.getElementById('id');
+
+        productNameContainer.innerHTML = '';
+
+        let validForm = formdata.map(function (data, index) {
+            let totalPrice = data.Quantity * data.saleprice; // Calculate total price
+            // Save total price to local storage
+            data.totalPrice = totalPrice;
+
+            // Update local storage with modified formdata
+            localStorage.setItem('formdata', JSON.stringify(formdata));
+
+            return `        
+                <div class="container m-auto border">
+                    <div class="row shadow-lg p-3 mb-5 bg-white rounded">
+                        <div class="col-lg-6 shadow-lg p-3 mb-5 bg-white rounded">
+                            <img src="${data.imageURL}" alt="" class="img-fluid w-100" id="img">
+                        </div>
+                        <div class="col-lg-6">
+                            <p>Product id: ${index + 1}</p>
+                            <h4>ProductName: ${data.ProductName}</h4>
+                            <p>Product Description: ${data.productDescription}</p>
+                            <p>Total Price:₹${TotalPrice}</p>
+                            <a class="btn btn-warning mt-3" herf="E:\DREAM  thiru\THIRU\ekart project\orderplaced.html">continue</a>
+                        </div>
+                    </div>
+                </div>`;
+        }).join('');
+
+        productNameContainer.innerHTML = validForm;
+    }
+</script>
+
+  
+  
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="./bootstrap.min.js"></script>
+
+
+    </body>
+</html>

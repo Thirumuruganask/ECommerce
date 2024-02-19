@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./bootstrap.min.css"> 
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>ECommerce</title>
+</head>
+<body>
+    <section>
+        <nav class="navbar navbar-expand-lg navbar-dark  bg-primary">
+            <a class="navbar-brand" href="#">ECommerce</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="menu"><i class="fa-solid fa-bars"></i></div>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Add Products<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./allproduct.html">Products Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./productinfo.html">My Cart</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+    <section>
+        <div class="container shadow-lg p-3 mb-5 bg-white rounded mt-5 border">
+            <div class="row">
+                <div class="m-auto">
+                    <div class="ml-5">
+                        <h1>ADD PRODUCT</h1>
+                    </div>
+                    <div class="font-weight-bold">
+                        <div class="form-group">
+                            <label for="ProductName">ProductName <span>*</span></label>
+                            <input type="text" placeholder="Enter Your ProductName" id="ProductName" value=""
+                                class="form-control" onchange="handleChange(event)">
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Product Description <span>*</span></label>
+                            <textarea name="" id="productDescription" onchange="handleChange(event)" rows="3"
+                                placeholder="Enter Your Product Description" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productimg">upload for product img <span>*</span></label>
+                            <input type="file" accept="image/*" onchange="loadFile(event)" id="productimg">
+                            <img id="output" class="img-fluid" />
+                        </div>
+                        <div class="form-group">
+                            <label for="productprice">Product Orginal Price <span>*</span></label>
+                            <input type="text" placeholder="" class="form-control" id="productprice"
+                                onchange="handleChange(event)" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="productprice">Product Discount Type<span>*</span></label>
+                            <select id="productDiscount" class="form-control" onchange="handleChange(event)">
+                                <option value="">--select Discount Type--</option>
+                                <option value="%">Percentage %</option>
+                                <option value="flat">Flat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="DiscountPrice">Product Discount Price <span>*</span></label>
+                            <input type="number" placeholder="" class="form-control" id="DiscountPrice"
+                                onchange="handleChange(event)" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="saleprice">Sale Price <span>*</span></label>
+                            <input type="text" placeholder="" class="form-control" id="saleprice"
+                                onchange="handleChange(event)" value="">
+                        </div>
+
+                        <button onclick="validateLoginForm()" class="btn btn-success">Add Product</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        var totalData = JSON.parse(localStorage.getItem('formdata')) || [];
+    
+        let formdata = {
+            ProductName: '',
+            productDescription: '',
+            productprice: '',
+            productDiscount: '',
+            DiscountPrice: '',
+            saleprice: '',
+            imageURL: '',
+        };
+    
+        function validateLoginForm() {
+            let isvalid = true;
+    
+            for (const key in formdata) {
+                if (formdata.hasOwnProperty(key) && !formdata[key]) {
+                    isvalid = false;
+                    break;
+                }
+            }
+    
+            if (isvalid) {
+                calculateSalePrice();
+    
+                totalData.push(formdata);
+                localStorage.setItem("formdata", JSON.stringify(totalData));
+    
+                // Reset the form
+                document.getElementById("ProductName").value = "";
+                document.getElementById("productDescription").value = "";
+                document.getElementById("productprice").value = "";
+                document.getElementById("productDiscount").value = "";
+                document.getElementById("DiscountPrice").value = "";
+                document.getElementById("saleprice").value = "";
+                document.getElementById("productimg").value = "";
+                document.getElementById("output").src = "";
+            }
+        }
+    
+        function handleChange(event) {
+            const id = event.target.id;
+            const value = event.target.value;
+    
+            if (id === 'productimg') {
+                loadFile(event);
+            } else {
+                formdata[id] = value;
+            }
+    
+            calculateSalePrice();
+        }
+    
+        function calculateSalePrice() {
+            let productprice = parseFloat(document.getElementById('productprice').value);
+            let DiscountPrice = parseFloat(document.getElementById('DiscountPrice').value);
+            let discountType = document.getElementById('productDiscount').value;
+            let saleprice;
+    
+            if (discountType === '%') {
+                saleprice = productprice - (productprice * (DiscountPrice / 100));
+            } else if (discountType === 'flat') {
+                saleprice = productprice - DiscountPrice;
+            } else {
+                saleprice = productprice;
+            }
+    
+            formdata.saleprice = saleprice.toFixed(2);
+            document.getElementById('saleprice').value = formdata.saleprice;
+        }
+    
+        var loadFile = function (event) {
+            let imageInfo = null;
+            let imageFile = null;
+            let imageInput = document.getElementById('productimg');
+    
+            if (imageInput.files.length > 0) {
+                imageFile = imageInput.files[0];
+                const reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    imageInfo = {
+                        fileName: imageFile.name,
+                        dataURL: e.target.result
+                    };
+    
+                    formdata.imageURL = imageInfo.dataURL;
+    
+                    document.getElementById('output').src = imageInfo.dataURL;
+    
+                    document.getElementById('output').onload = function () {
+                        URL.revokeObjectURL(imageInfo.dataURL);
+                    };
+                };
+    
+                reader.readAsDataURL(imageFile);
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="./bootstrap.min.js"></script>
+
+</body>
+
+</html>
